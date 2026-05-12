@@ -5,6 +5,11 @@ export const runAccessibilityScan = async (url) => {
 
   const browser = await chromium.launch({
     headless: true,
+    args: [
+      "--disable-features=PrivateNetworkAccessSendPreflights",
+      "--no-sandbox",
+      "--disable-web-security",
+    ],
   });
 
   const page = await browser.newPage();
