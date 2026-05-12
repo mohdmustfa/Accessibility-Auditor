@@ -62,7 +62,7 @@ function InputUrl({ onScan, loading }) {
 
       <div className="max-w-[750px] mx-auto mb-10 relative px-2">
 
-        <div className="input-wrap flex justify-center items-center space-x-4 mt-10 p-5 rounded-lg bg-white">
+        <div className="input-wrap flex justify-center items-center space-x-4 mt-10 md:p-5 p-2 rounded-lg bg-white">
 
           {/* ICON */}
           <div className="bg-gray-100 p-3 border border-gray-300 rounded-lg hidden sm:block">
