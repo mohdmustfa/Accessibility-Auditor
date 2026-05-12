@@ -7,22 +7,41 @@ function ViolationNode({ node }) {
 
   const handleCopy = async () => {
 
-    try {
+  try {
+
+    if (navigator.clipboard) {
 
       await navigator.clipboard.writeText(node.html);
 
-      setCopied(true);
+    } else {
 
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
+      // fallback
+      const textArea =
+        document.createElement("textarea");
 
-    } catch (error) {
+      textArea.value = node.html;
 
-      ( error);
+      document.body.appendChild(textArea);
 
+      textArea.select();
+
+      document.execCommand("copy");
+
+      document.body.removeChild(textArea);
     }
-  };
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+
+  } catch (error) {
+
+    console.error("Copy failed", error);
+
+  }
+};
 
   return (
     <div className="bg-white border rounded-lg p-4 mb-3 last:mb-0 border-gray-300">
