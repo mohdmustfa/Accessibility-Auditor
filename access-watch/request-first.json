@@ -1,0 +1,8 @@
+{
+    "id": "29148294-46e2-4208-b4d6-2cab01a27237",
+    "status": "queued",
+    "url": "https://mmmalik01.netlify.app",
+    "standard": "wcag22aa",
+    "createdAt": "2026-05-08 13:30:24",
+    "message": "Scan queued successfully. Poll GET /v1/scans/:id for results."
+}
