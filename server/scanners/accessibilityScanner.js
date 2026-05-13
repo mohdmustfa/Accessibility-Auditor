@@ -6,27 +6,33 @@ export const runAccessibilityScan = async (url) => {
   const browser = await chromium.launch({
     headless: true,
     args: [
-      "--disable-features=PrivateNetworkAccessSendPreflights",
       "--no-sandbox",
-      "--disable-web-security",
+      "--disable-setuid-sandbox",
     ],
   });
 
-  const page = await browser.newPage();
+  try {
 
-  await page.goto(url, {
-    waitUntil: "networkidle",
-  });
+    const page = await browser.newPage();
 
-  // Inject axe-core
-  await page.evaluate(axe.source);
+    await page.goto(url, {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
 
-  // Run accessibility scan
-  const results = await page.evaluate(async () => {
-    return await axe.run();
-  });
+    // inject axe-core
+    await page.evaluate(axe.source);
 
-  await browser.close();
+    // run accessibility scan
+    const results = await page.evaluate(async () => {
+      return await axe.run();
+    });
 
-  return results;
+    return results;
+
+  } finally {
+
+    await browser.close();
+
+  }
 };

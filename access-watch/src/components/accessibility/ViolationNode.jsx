@@ -66,7 +66,7 @@ function ViolationNode({ node }) {
 
         <div className="flex items-center justify-between mb-2">
           <p className="font-semibold">
-            Problematic HTML
+            HTML Snippet
           </p>
              <button
             onClick={handleCopy}
