@@ -1,4 +1,5 @@
-import { chromium } from "playwright";
+// import { chromium } from "playwright";
+import { chromium } from "playwright-core";
 import axe from "axe-core";
 
 export const runAccessibilityScan = async (url) => {
