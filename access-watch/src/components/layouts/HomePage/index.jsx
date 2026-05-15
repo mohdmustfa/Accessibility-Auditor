@@ -118,7 +118,7 @@ function HomePage() {
                     title={
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-3 w-full pr-4">
 
-                        <div>
+                        <div className="w-full">
                             <h3 className="text-xl font-bold text-slate-800 capitalize">
                             {violation.id}
                             </h3>
@@ -131,7 +131,7 @@ function HomePage() {
                             </p>
                         </div>
 
-                        <div>
+                        <div className="w-full lg:text-right">
                             <span
                             className={`
                                 inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold

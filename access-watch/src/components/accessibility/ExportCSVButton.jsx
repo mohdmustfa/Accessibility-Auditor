@@ -1,3 +1,4 @@
+import {FileSpreadsheet} from "lucide-react";
 function ExportCSVButton({ violations }) {
 
   const exportToCSV = () => {
@@ -12,12 +13,31 @@ function ExportCSVButton({ violations }) {
 
         rows.push({
           id: violation.id,
+
           impact: violation.impact,
+
+          wcagLevel:
+            violation.tags.find(tag =>
+              tag.includes("wcag2")
+            ) || "",
+
+          successCriteria:
+            violation.tags
+              .filter(tag =>
+                /^wcag\d+$/.test(tag)
+              )
+              .join(", "),
+
           description: violation.description,
+
           help: violation.help,
+
           helpUrl: violation.helpUrl,
+
           target: node.target.join(", "),
+
           html: node.html,
+
           failureSummary: node.failureSummary,
         });
 
@@ -66,9 +86,9 @@ function ExportCSVButton({ violations }) {
   return (
     <button
       onClick={exportToCSV}
-      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition cursor-pointer"
+      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition cursor-pointer flex items-center"
     >
-      Export CSV
+      <FileSpreadsheet /> <span className="block">Export CSV</span>
     </button>
   );
 }

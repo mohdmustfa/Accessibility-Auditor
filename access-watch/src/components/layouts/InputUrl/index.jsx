@@ -79,6 +79,7 @@ function InputUrl({ onScan, loading }) {
 
           {/* INPUT */}
           <Input
+           id="auditInput"
             value={url}
             onChange={(e) => {
 
@@ -111,7 +112,7 @@ function InputUrl({ onScan, loading }) {
 
         {/* ERROR */}
         {error && (
-          <p className="text-red-600 text-[12px] mt-4 text-center absolute left-[100px] bottom-0">
+          <p className="text-red-600 text-[12px] mt-4 text-center absolute left-[20px] md:left-[105px] bottom-[-27px] md:bottom-[0px]">
             {error}
           </p>
         )}

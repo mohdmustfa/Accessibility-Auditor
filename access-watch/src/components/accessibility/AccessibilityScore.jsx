@@ -22,15 +22,31 @@ function AccessibilityScore({
             Accessibility Score
           </h2>
 
-          <p className="text-7xl font-medium text-blue-600 mt-6">
-            {score}
+          <p className="text-7xl font-medium mt-6">
+            <span className="text-blue-800">{score}</span>
 
-            <span className="text-blue-400">
+            <span className="text-blue-500">
               /100
             </span>
           </p>
 
-          <div className="inline-flex items-center bg-orange-50 text-orange-600 px-2 py-1 rounded-lg mt-2 text-sm font-bold">
+          <div className={`inline-flex items-center px-3 py-1 rounded-lg mt-3 text-sm font-bold capitalize
+            ${
+              category === "Excellent"
+                ? "bg-green-50 text-green-700"
+
+              : category === "Good"
+                ? "bg-blue-50 text-blue-700"
+
+              : category === "Average"
+                ? "bg-yellow-50 text-orange-700"
+
+              : category === "Poor"
+                ? "bg-orange-50 text-red-700"
+
+              : "bg-red-50 text-red-700"
+            }
+          `}>
             {category}
           </div>
 
