@@ -71,7 +71,7 @@ function HomePage() {
     : 0;
 
   return (
-     <main>
+     
     <section className="bg-body min-h-screen">
       <HeadingText />
       <InputUrl
@@ -163,7 +163,6 @@ function HomePage() {
         </div>
       )}
     </section>
-    </main>
 
   );
 }
