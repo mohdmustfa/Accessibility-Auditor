@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import Header from "../Header";
 import HeadingText from "../HeadingText";
 import InputUrl from "../InputUrl";
 import Loader from "../Loader";
+
 import AccessibilityScore from "../../accessibility/AccessibilityScore";
 import ViolationCard from "../../accessibility/ViolationCard";
 import Accordion from "../../ui/Accordion";
+
 import { scanWebsite } from "../../services/scanApi";
+
 import ExportCSVButton from "../../accessibility/ExportCSVButton";
 
-import {calculateAccessibilityScore, getAccessibilityCategory} from "../../utils/accessibilityScore";
+import {
+  calculateAccessibilityScore,
+  getAccessibilityCategory,
+} from "../../utils/accessibilityScore";
 
 function HomePage() {
 
@@ -18,6 +25,38 @@ function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState("");
+
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  const loadingSteps = [
+    "Scanning website...",
+    "Connecting axe-core...",
+    "Validating WCAG guidelines...",
+    "Generating accessibility report...",
+  ];
+
+  useEffect(() => {
+
+    if (!loading) return;
+
+    setLoadingStep(0);
+
+    const interval = setInterval(() => {
+
+      setLoadingStep((prev) => {
+
+        if (prev < loadingSteps.length - 1) {
+
+          return prev + 1;
+        }
+        return prev;
+      });
+
+    }, 3000);
+
+    return () => clearInterval(interval);
+
+  }, [loading]);
 
   const handleScan = async (url) => {
 
@@ -35,8 +74,6 @@ function HomePage() {
 
     } catch (error) {
 
-      (error);
-
       setError(
         error.response?.data?.message ||
         "Sorry, could not fetch data for this URL"
@@ -46,6 +83,7 @@ function HomePage() {
 
       setLoading(false);
 
+      setLoadingStep(0);
     }
   };
 
@@ -71,15 +109,21 @@ function HomePage() {
     : 0;
 
   return (
-     
+
     <section className="bg-body min-h-screen">
       <HeadingText />
+
       <InputUrl
         onScan={handleScan}
         loading={loading}
       />
 
-      {loading && <Loader />}
+      {loading && (
+        <Loader
+          currentStep={loadingStep}
+          steps={loadingSteps}
+        />
+      )}
 
       {error && (
         <p className="text-red-600 text-sm mt-2 text-center">
@@ -97,71 +141,91 @@ function HomePage() {
             totalCategories={totalCategories}
             totalIssues={totalIssues}
           />
+
           <div className="mt-10">
-            
+
             <div className="flex fex-wrap items-center justify-between mb-4">
-            <h2 className="text-2xl font-extrabold mb-0">
-              Accessibility Violations
-            </h2>
-             <div className="flex justify-end">
+
+              <h2 className="text-2xl font-extrabold mb-0">
+                Accessibility Violations
+              </h2>
+
+              <div className="flex justify-end">
+
                 <ExportCSVButton
-                    violations={result.violations}
+                  violations={result.violations}
                 />
-                </div>
+
+              </div>
+
             </div>
 
             <div className="space-y-6">
-                {result.violations.map((violation) => (
 
-                    <Accordion
-                    key={violation.id}
-                    title={
+              {result.violations.map((violation) => (
+
+                <Accordion
+                  key={violation.id}
+                  title={
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-3 w-full pr-4">
 
-                        <div className="w-full">
-                            <h3 className="text-xl font-bold text-slate-800 capitalize">
-                            {violation.id}
-                            </h3>
+                      <div className="w-full">
 
-                            <p className="text-sm text-slate-500 mt-1">
-                            Total Affected Elements:
-                            <span className="font-semibold text-slate-700 ml-1">
-                                {violation.nodes.length}
-                            </span>
-                            </p>
-                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 capitalize">
+                          {violation.id}
+                        </h3>
 
-                        <div className="w-full lg:text-right">
-                            <span
-                            className={`
-                                inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold
-                                ${
-                                violation.impact === "critical"
-                                    ? "bg-red-100 text-red-700"
-                                    : violation.impact === "serious"
-                                    ? "bg-orange-100 text-orange-700"
-                                    : violation.impact === "moderate"
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-blue-100 text-blue-700"
-                                }
-                            `}
-                            >
-                            Impact: {violation.impact}
-                            </span>
-                        </div>
+                        <p className="text-sm text-slate-500 mt-1">
+
+                          Total Affected Elements:
+
+                          <span className="font-semibold text-slate-700 ml-1">
+                            {violation.nodes.length}
+                          </span>
+
+                        </p>
+
+                      </div>
+
+                      <div className="w-full lg:text-right">
+
+                        <span
+                          className={`
+                            inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold
+                            ${
+                              violation.impact === "critical"
+                                ? "bg-red-100 text-red-700"
+                                : violation.impact === "serious"
+                                ? "bg-orange-100 text-orange-700"
+                                : violation.impact === "moderate"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-blue-100 text-blue-700"
+                            }
+                          `}
+                        >
+                          Impact: {violation.impact}
+                        </span>
+
+                      </div>
+
                     </div>
-                    }
-                    >
-                    <ViolationCard violation={violation} />
+                  }
+                >
 
-                    </Accordion>
+                <ViolationCard violation={violation} />
 
-                ))}
+                </Accordion>
 
-                </div>
+              ))}
+
+            </div>
+
           </div>
+
         </div>
+
       )}
+
     </section>
 
   );
