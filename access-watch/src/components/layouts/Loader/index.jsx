@@ -8,7 +8,7 @@ function Loader({ currentStep, steps }) {
       <div className="w-6 h-6 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin mb-6"></div>
 
       {/* Loading Steps */}
-      <div className="space-y-3 w-full max-w-md">
+      <div className="space-y-3 w-full max-w-md px-3">
 
         {steps.map((step, index) => (
 
